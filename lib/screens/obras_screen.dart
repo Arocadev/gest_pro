@@ -36,7 +36,9 @@ class _ObrasScreenState extends State<ObrasScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (controller.text.trim().isEmpty) return;
+                if (controller.text.trim().isEmpty) {
+                  return;
+                }
 
                 setState(() {
                   obras.add(
@@ -97,11 +99,18 @@ class _ObrasScreenState extends State<ObrasScreen> {
                         ),
                       );
                     },
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        eliminarObra(index);
+                    trailing: PopupMenuButton<String>(
+                      onSelected: (value) {
+                        if (value == 'delete') {
+                          eliminarObra(index);
+                        }
                       },
+                      itemBuilder: (_) => const [
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Eliminar obra'),
+                        ),
+                      ],
                     ),
                   ),
                 );
