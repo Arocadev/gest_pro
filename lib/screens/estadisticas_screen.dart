@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/obra.dart';
+import '../services/backup_service.dart';
 import '../services/storage_service.dart';
 
 class EstadisticasScreen extends StatelessWidget {
@@ -93,6 +94,32 @@ class EstadisticasScreen extends StatelessWidget {
             const Text(
           'Estadísticas',
         ),
+        actions: [
+          IconButton(
+            icon:
+                const Icon(
+              Icons.backup,
+            ),
+            tooltip:
+                'Crear backup',
+            onPressed: () async {
+              await BackupService
+                  .exportarBackup();
+
+              if (context.mounted) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Backup creado',
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: ListView(
         padding:

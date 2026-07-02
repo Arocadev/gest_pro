@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:printing/printing.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../models/obra.dart';
 import '../services/pdf_service.dart';
@@ -44,9 +44,8 @@ class _DetalleObraScreenState
                 items: const [
                   DropdownMenuItem(
                     value: 'Pendiente',
-                    child: Text(
-                      'Pendiente',
-                    ),
+                    child:
+                        Text('Pendiente'),
                   ),
                   DropdownMenuItem(
                     value: 'En curso',
@@ -152,16 +151,19 @@ class _DetalleObraScreenState
               Icons.picture_as_pdf,
             ),
             onPressed: () async {
-              final pdf =
+              final file =
                   await PdfService
-                      .generarObra(
+                      .guardarPdf(
                 obra,
               );
 
-              await Printing.layoutPdf(
-                onLayout:
-                    (format) async =>
-                        pdf.save(),
+              await Share.shareXFiles(
+                [
+                  XFile(file.path),
+                ],
+                text:
+                    'Resumen de la obra ${obra.nombre}',
+                    subject: 'Resumen de obra',
               );
             },
           ),
@@ -283,7 +285,7 @@ class _DetalleObraScreenState
                 'Economía',
               ),
               subtitle: Text(
-                'Presupuesto: ${obra.presupuesto.toStringAsFixed(0)} €',
+                'Presupuesto: ${obra.presupuesto.toStringAsFixed(0)} EUR',
               ),
               trailing:
                   const Icon(

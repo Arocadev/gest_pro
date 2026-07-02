@@ -66,7 +66,7 @@ class _HomeScreenState
               Icons.bar_chart,
             ),
             label:
-                'Stats',
+                'Estadísticas',
           ),
         ],
       ),
