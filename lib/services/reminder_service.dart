@@ -1,0 +1,3 @@
+class ReminderService {
+  const ReminderService();
+}
