@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
+
 import '../models/obra.dart';
+import '../services/pdf_service.dart';
 import 'economia_screen.dart';
 import 'materiales_screen.dart';
 import 'tareas_screen.dart';
@@ -26,12 +29,16 @@ class _DetalleObraScreenState
       context: context,
       builder: (_) {
         return StatefulBuilder(
-          builder: (context, setDialogState) {
+          builder: (
+            context,
+            setDialogState,
+          ) {
             return AlertDialog(
               title: const Text(
                 'Estado de la obra',
               ),
-              content: DropdownButton<String>(
+              content:
+                  DropdownButton<String>(
                 value: estado,
                 isExpanded: true,
                 items: const [
@@ -43,15 +50,13 @@ class _DetalleObraScreenState
                   ),
                   DropdownMenuItem(
                     value: 'En curso',
-                    child: Text(
-                      'En curso',
-                    ),
+                    child:
+                        Text('En curso'),
                   ),
                   DropdownMenuItem(
                     value: 'Terminada',
-                    child: Text(
-                      'Terminada',
-                    ),
+                    child:
+                        Text('Terminada'),
                   ),
                 ],
                 onChanged: (value) {
@@ -67,7 +72,9 @@ class _DetalleObraScreenState
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(
+                      context,
+                    );
                   },
                   child:
                       const Text('Cancelar'),
@@ -79,7 +86,9 @@ class _DetalleObraScreenState
                           estado;
                     });
 
-                    Navigator.pop(context);
+                    Navigator.pop(
+                      context,
+                    );
                   },
                   child:
                       const Text('Guardar'),
@@ -92,8 +101,8 @@ class _DetalleObraScreenState
     );
   }
 
-  Future<void> seleccionarFechaInicio()
-      async {
+  Future<void>
+      seleccionarFechaInicio() async {
     final fecha =
         await showDatePicker(
       context: context,
@@ -137,6 +146,26 @@ class _DetalleObraScreenState
     return Scaffold(
       appBar: AppBar(
         title: Text(obra.nombre),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.picture_as_pdf,
+            ),
+            onPressed: () async {
+              final pdf =
+                  await PdfService
+                      .generarObra(
+                obra,
+              );
+
+              await Printing.layoutPdf(
+                onLayout:
+                    (format) async =>
+                        pdf.save(),
+              );
+            },
+          ),
+        ],
       ),
       body: ListView(
         children: [
