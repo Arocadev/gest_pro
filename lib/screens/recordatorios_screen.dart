@@ -29,11 +29,38 @@ class _RecordatoriosScreenState
   }
 
   void cargar() {
+    final lista =
+        ReminderService.cargar();
+
+    lista.sort(
+      (a, b) =>
+          a.fecha.compareTo(
+        b.fecha,
+      ),
+    );
+
     setState(() {
-      recordatorios =
-          ReminderService
-              .cargar();
+      recordatorios = lista;
     });
+  }
+
+  Future<void>
+      eliminarCompletados() async {
+    final lista =
+        ReminderService.cargar();
+
+    for (int i =
+            lista.length - 1;
+        i >= 0;
+        i--) {
+      if (lista[i]
+          .completado) {
+        await ReminderService
+            .eliminar(i);
+      }
+    }
+
+    cargar();
   }
 
   @override
@@ -45,6 +72,27 @@ class _RecordatoriosScreenState
         title: const Text(
           'Recordatorios',
         ),
+        actions: [
+          PopupMenuButton<
+              String>(
+            onSelected:
+                (value) async {
+              if (value ==
+                  'borrar') {
+                await eliminarCompletados();
+              }
+            },
+            itemBuilder:
+                (_) => const [
+              PopupMenuItem(
+                value: 'borrar',
+                child: Text(
+                  'Eliminar completados',
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       floatingActionButton:
           FloatingActionButton(
@@ -90,6 +138,45 @@ class _RecordatoriosScreenState
                     return Card(
                       child:
                           ListTile(
+                        onTap: () {
+                          if (r
+                              .descripcion
+                              .trim()
+                              .isEmpty) {
+                            return;
+                          }
+
+                          showDialog(
+                            context:
+                                context,
+                            builder:
+                                (_) =>
+                                    AlertDialog(
+                              title:
+                                  Text(
+                                r.titulo,
+                              ),
+                              content:
+                                  Text(
+                                r.descripcion,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed:
+                                      () {
+                                    Navigator.pop(
+                                      context,
+                                    );
+                                  },
+                                  child:
+                                      const Text(
+                                    'Cerrar',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                         leading:
                             Icon(
                           r.completado
@@ -117,12 +204,35 @@ class _RecordatoriosScreenState
                           ),
                         ),
                         subtitle:
+                            Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
+                          children: [
                             Text(
-                          '${r.fecha.day.toString().padLeft(2, '0')}/'
-                          '${r.fecha.month.toString().padLeft(2, '0')}/'
-                          '${r.fecha.year} · '
-                          '${r.fecha.hour.toString().padLeft(2, '0')}:'
-                          '${r.fecha.minute.toString().padLeft(2, '0')}',
+                              '${r.fecha.day.toString().padLeft(2, '0')}/'
+                              '${r.fecha.month.toString().padLeft(2, '0')}/'
+                              '${r.fecha.year} · '
+                              '${r.fecha.hour.toString().padLeft(2, '0')}:'
+                              '${r.fecha.minute.toString().padLeft(2, '0')}',
+                            ),
+                            if (!r.completado &&
+                                r.fecha.isBefore(
+                                  DateTime
+                                      .now(),
+                                ))
+                              const Text(
+                                'Vencido',
+                                style:
+                                    TextStyle(
+                                  color:
+                                      Colors.red,
+                                  fontWeight:
+                                      FontWeight
+                                          .bold,
+                                ),
+                              ),
+                          ],
                         ),
                         trailing:
                             PopupMenuButton<
