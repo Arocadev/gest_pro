@@ -80,6 +80,53 @@ class ReminderService {
 
     await box.putAt(index, r);
 
-    await guardar(r);
+    final newBaseId = DateTime.now().millisecondsSinceEpoch % 1000000000;
+
+    if (r.avisarDiaAntes) {
+      final fecha = r.fecha.subtract(const Duration(days: 1));
+      if (fecha.isAfter(DateTime.now())) {
+        await NotificationService.programarNotificacion(
+          id: newBaseId,
+          titulo: '📋 ${r.titulo}',
+          cuerpo: 'Mañana tienes un recordatorio',
+          fecha: fecha,
+        );
+      }
+    }
+
+    if (r.avisar6HorasAntes) {
+      final fecha = r.fecha.subtract(const Duration(hours: 6));
+      if (fecha.isAfter(DateTime.now())) {
+        await NotificationService.programarNotificacion(
+          id: newBaseId + 1,
+          titulo: '📋 ${r.titulo}',
+          cuerpo: 'En 6 horas tienes un recordatorio',
+          fecha: fecha,
+        );
+      }
+    }
+
+    if (r.avisar1HoraAntes) {
+      final fecha = r.fecha.subtract(const Duration(hours: 1));
+      if (fecha.isAfter(DateTime.now())) {
+        await NotificationService.programarNotificacion(
+          id: newBaseId + 2,
+          titulo: '📋 ${r.titulo}',
+          cuerpo: 'En 1 hora tienes un recordatorio',
+          fecha: fecha,
+        );
+      }
+    }
+
+    if (r.fecha.isAfter(DateTime.now())) {
+      await NotificationService.programarNotificacion(
+        id: newBaseId + 3,
+        titulo: '📋 ${r.titulo}',
+        cuerpo: r.descripcion.isNotEmpty
+            ? r.descripcion
+            : 'Es la hora de tu recordatorio',
+        fecha: r.fecha,
+      );
+    }
   }
 }
