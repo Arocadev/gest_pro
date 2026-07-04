@@ -1,5 +1,5 @@
 name: obra_control
-description: "A new Flutter project."
+description: "ObraControl es una app de gestión de obras y finanzas para profesionales de la construcción. Permite controlar obras, tareas, materiales, pagos, cobros, calendario y recordatorios desde el móvil."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -27,6 +27,7 @@ dependencies:
   timezone: ^0.9.4
   google_fonts: ^6.3.0
   fl_chart: ^1.0.0
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +35,25 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.4.13
   hive_generator: ^2.0.1
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icono.png"
+  adaptive_icon_background: "#FAF0E6"
+  adaptive_icon_foreground: "assets/icono.png"
+
+flutter_native_splash:
+  color: "#FAF0E6"
+  image: assets/splash.png
+  android: true
+  ios: false
+  fullscreen: true
+  android_gravity: fill
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icono.png
+    - assets/splash.png

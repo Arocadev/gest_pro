@@ -1,39 +1,24 @@
 import 'package:flutter/material.dart';
 
-class LeyendaCalendario
-    extends StatelessWidget {
-  const LeyendaCalendario({
-    super.key,
-  });
+class LeyendaCalendario extends StatelessWidget {
+  const LeyendaCalendario({super.key});
 
-  Widget item(
-    Color color,
-    String texto,
-  ) {
+  Widget item(Color color, String texto) {
     return Row(
-      mainAxisSize:
-          MainAxisSize.min,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 12,
-          height: 12,
-          decoration:
-              BoxDecoration(
-            color: color,
-            shape:
-                BoxShape.circle,
-          ),
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(
-          width: 4,
-        ),
+        const SizedBox(width: 5),
         Text(
           texto,
-          style:
-              const TextStyle(
-            fontSize: 13,
-            fontWeight:
-                FontWeight.w500,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade700,
           ),
         ),
       ],
@@ -41,40 +26,19 @@ class LeyendaCalendario
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    return SingleChildScrollView(
-      scrollDirection:
-          Axis.horizontal,
-      child: Row(
-        mainAxisAlignment:
-            MainAxisAlignment.center,
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 16,
+        runSpacing: 6,
         children: [
-          item(
-            Colors.green,
-            'Inicio',
-          ),
-          const SizedBox(width: 20),
-          item(
-            Colors.red,
-            'Fin',
-          ),
-          const SizedBox(width: 20),
-          item(
-            Colors.orange,
-            'Pago',
-          ),
-          const SizedBox(width: 20),
-          item(
-            Colors.blue,
-            'Cobro',
-          ),
-          const SizedBox(width: 20),
-          item(
-            Colors.purple,
-            'Recordatorio',
-          ),
+          item(Colors.green, 'Inicio obra'),
+          item(Colors.red, 'Fin obra'),
+          item(Colors.orange, 'Pago'),
+          item(Colors.blue, 'Cobro'),
+          item(Colors.purple, 'Recordatorio'),
         ],
       ),
     );

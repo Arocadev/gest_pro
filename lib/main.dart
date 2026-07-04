@@ -23,94 +23,44 @@ Future<void> main() async {
 
   await Hive.initFlutter();
 
-  Hive.registerAdapter(
-    TareaAdapter(),
-  );
+  Hive.registerAdapter(TareaAdapter());
+  Hive.registerAdapter(MaterialObraAdapter());
+  Hive.registerAdapter(ObraAdapter());
+  Hive.registerAdapter(PagoAdapter());
+  Hive.registerAdapter(CobroAdapter());
+  Hive.registerAdapter(RecordatorioAdapter());
 
-  Hive.registerAdapter(
-    MaterialObraAdapter(),
-  );
-
-  Hive.registerAdapter(
-    ObraAdapter(),
-  );
-
-  Hive.registerAdapter(
-    PagoAdapter(),
-  );
-
-  Hive.registerAdapter(
-    CobroAdapter(),
-  );
-
-  Hive.registerAdapter(
-    RecordatorioAdapter(),
-  );
-
-  await Hive.openBox<Obra>(
-    StorageService.obrasBox,
-  );
-
-  await Hive.openBox<Pago>(
-    StorageService.pagosBox,
-  );
-
-  await Hive.openBox<Cobro>(
-    StorageService.cobrosBox,
-  );
-
-  await Hive.openBox<Recordatorio>(
-    StorageService.recordatoriosBox,
-  );
+  await Hive.openBox<Obra>(StorageService.obrasBox);
+  await Hive.openBox<Pago>(StorageService.pagosBox);
+  await Hive.openBox<Cobro>(StorageService.cobrosBox);
+  await Hive.openBox<Recordatorio>(StorageService.recordatoriosBox);
 
   await NotificationService.init();
 
-  runApp(
-    const ObraControlApp(),
-  );
+  runApp(const ObraControlApp());
 }
 
-class ObraControlApp
-    extends StatelessWidget {
-  const ObraControlApp({
-    super.key,
-  });
+class ObraControlApp extends StatelessWidget {
+  const ObraControlApp({super.key});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner:
-          false,
+      debugShowCheckedModeBanner: false,
       title: 'ObraControl',
       theme: ThemeData(
-        textTheme:
-            GoogleFonts.interTextTheme(),
-        colorScheme:
-            ColorScheme.fromSeed(
-          seedColor:
-              Colors.orange,
-        ),
+        textTheme: GoogleFonts.interTextTheme(),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
-      localizationsDelegates:
-          const [
-        GlobalMaterialLocalizations
-            .delegate,
-        GlobalWidgetsLocalizations
-            .delegate,
-        GlobalCupertinoLocalizations
-            .delegate,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales:
-          const [
-        Locale('es'),
-      ],
-      locale:
-          const Locale('es'),
-      home:
-          const HomeScreen(),
+      supportedLocales: const [Locale('es')],
+      locale: const Locale('es'),
+      home: const HomeScreen(),
     );
   }
 }

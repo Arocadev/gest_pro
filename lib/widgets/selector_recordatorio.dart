@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SelectorRecordatorio
-    extends StatelessWidget {
+class SelectorRecordatorio extends StatelessWidget {
   final String texto;
   final bool valor;
-  final ValueChanged<bool?>
-      onChanged;
+  final ValueChanged<bool?> onChanged;
 
   const SelectorRecordatorio({
     super.key,
@@ -15,16 +13,17 @@ class SelectorRecordatorio
   });
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return CheckboxListTile(
-      title: Text(texto),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      title: Text(
+        texto,
+        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+      ),
       value: valor,
       onChanged: onChanged,
-      controlAffinity:
-          ListTileControlAffinity
-              .leading,
+      controlAffinity: ListTileControlAffinity.leading,
+      activeColor: Colors.indigo,
     );
   }
 }

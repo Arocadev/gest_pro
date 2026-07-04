@@ -5,27 +5,17 @@ import '../models/obra.dart';
 class MaterialesScreen extends StatefulWidget {
   final Obra obra;
 
-  const MaterialesScreen({
-    super.key,
-    required this.obra,
-  });
+  const MaterialesScreen({super.key, required this.obra});
 
   @override
-  State<MaterialesScreen> createState() =>
-      _MaterialesScreenState();
+  State<MaterialesScreen> createState() => _MaterialesScreenState();
 }
 
-class _MaterialesScreenState
-    extends State<MaterialesScreen> {
+class _MaterialesScreenState extends State<MaterialesScreen> {
   void crearMaterial() {
-    final nombreController =
-        TextEditingController();
-
-    final cantidadController =
-        TextEditingController();
-
-    final precioController =
-        TextEditingController();
+    final nombreController = TextEditingController();
+    final cantidadController = TextEditingController();
+    final precioController = TextEditingController();
 
     showDialog(
       context: context,
@@ -38,97 +28,51 @@ class _MaterialesScreenState
               children: [
                 TextField(
                   controller: nombreController,
-                  decoration:
-                      const InputDecoration(
-                    labelText: 'Nombre',
-                  ),
+                  decoration: const InputDecoration(labelText: 'Nombre'),
                 ),
                 const SizedBox(height: 12),
                 TextField(
-                  controller:
-                      cantidadController,
-                  keyboardType:
-                      const TextInputType
-                          .numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration:
-                      const InputDecoration(
-                    labelText: 'Cantidad',
-                  ),
+                  controller: cantidadController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(labelText: 'Cantidad'),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: precioController,
-                  keyboardType:
-                      const TextInputType
-                          .numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration:
-                      const InputDecoration(
-                    labelText:
-                        'Precio unidad (€)',
-                  ),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(labelText: 'Precio unidad (€)'),
                 ),
               ],
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child:
-                  const Text('Cancelar'),
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
             ),
             ElevatedButton(
               onPressed: () {
-                if (nombreController.text
-                    .trim()
-                    .isEmpty) {
-                  return;
-                }
+                if (nombreController.text.trim().isEmpty) return;
 
-                final cantidad =
-                    double.tryParse(
-                          cantidadController
-                              .text
-                              .replaceAll(
-                                ',',
-                                '.',
-                              ),
-                        ) ??
-                        0;
+                final cantidad = double.tryParse(
+                      cantidadController.text.replaceAll(',', '.'),
+                    ) ?? 0;
 
-                final precio =
-                    double.tryParse(
-                          precioController.text
-                              .replaceAll(
-                                ',',
-                                '.',
-                              ),
-                        ) ??
-                        0;
+                final precio = double.tryParse(
+                      precioController.text.replaceAll(',', '.'),
+                    ) ?? 0;
 
                 setState(() {
-                  widget.obra.materiales.add(
-                    MaterialObra(
-                      nombre:
-                          nombreController
-                              .text
-                              .trim(),
-                      cantidad: cantidad,
-                      precioUnidad:
-                          precio,
-                    ),
-                  );
+                  widget.obra.materiales.add(MaterialObra(
+                    nombre: nombreController.text.trim(),
+                    cantidad: cantidad,
+                    precioUnidad: precio,
+                  ));
                 });
 
                 Navigator.pop(context);
               },
-              child:
-                  const Text('Guardar'),
+              child: const Text('Guardar'),
             ),
           ],
         );
@@ -137,138 +81,68 @@ class _MaterialesScreenState
   }
 
   void editarMaterial(int index) {
-    final material =
-        widget.obra.materiales[index];
+    final material = widget.obra.materiales[index];
 
-    final nombreController =
-        TextEditingController(
-      text: material.nombre,
+    final nombreController = TextEditingController(text: material.nombre);
+    final cantidadController = TextEditingController(
+      text: material.cantidad == 0 ? '' : material.cantidad.toString(),
     );
-
-    final cantidadController =
-        TextEditingController(
-      text:
-          material.cantidad == 0
-              ? ''
-              : material.cantidad
-                  .toString(),
-    );
-
-    final precioController =
-        TextEditingController(
-      text:
-          material.precioUnidad == 0
-              ? ''
-              : material
-                  .precioUnidad
-                  .toString(),
+    final precioController = TextEditingController(
+      text: material.precioUnidad == 0 ? '' : material.precioUnidad.toString(),
     );
 
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
-          title:
-              const Text('Editar material'),
+          title: const Text('Editar material'),
           content: SingleChildScrollView(
             child: Column(
-              mainAxisSize:
-                  MainAxisSize.min,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller:
-                      nombreController,
-                  decoration:
-                      const InputDecoration(
-                    labelText: 'Nombre',
-                  ),
+                  controller: nombreController,
+                  decoration: const InputDecoration(labelText: 'Nombre'),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 TextField(
-                  controller:
-                      cantidadController,
-                  keyboardType:
-                      const TextInputType
-                          .numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration:
-                      const InputDecoration(
-                    labelText: 'Cantidad',
-                  ),
+                  controller: cantidadController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(labelText: 'Cantidad'),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 TextField(
-                  controller:
-                      precioController,
-                  keyboardType:
-                      const TextInputType
-                          .numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration:
-                      const InputDecoration(
-                    labelText:
-                        'Precio unidad (€)',
-                  ),
+                  controller: precioController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(labelText: 'Precio unidad (€)'),
                 ),
               ],
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child:
-                  const Text('Cancelar'),
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
             ),
             ElevatedButton(
               onPressed: () {
-                final cantidad =
-                    double.tryParse(
-                          cantidadController
-                              .text
-                              .replaceAll(
-                                ',',
-                                '.',
-                              ),
-                        ) ??
-                        0;
+                final cantidad = double.tryParse(
+                      cantidadController.text.replaceAll(',', '.'),
+                    ) ?? 0;
 
-                final precio =
-                    double.tryParse(
-                          precioController
-                              .text
-                              .replaceAll(
-                                ',',
-                                '.',
-                              ),
-                        ) ??
-                        0;
+                final precio = double.tryParse(
+                      precioController.text.replaceAll(',', '.'),
+                    ) ?? 0;
 
                 setState(() {
-                  material.nombre =
-                      nombreController
-                          .text
-                          .trim();
-
-                  material.cantidad =
-                      cantidad;
-
-                  material
-                          .precioUnidad =
-                      precio;
+                  material.nombre = nombreController.text.trim();
+                  material.cantidad = cantidad;
+                  material.precioUnidad = precio;
                 });
 
                 Navigator.pop(context);
               },
-              child:
-                  const Text('Guardar'),
+              child: const Text('Guardar'),
             ),
           ],
         );
@@ -276,39 +150,21 @@ class _MaterialesScreenState
     );
   }
 
-  Future<bool> confirmarEliminar(
-    String nombre,
-  ) async {
+  Future<bool> confirmarEliminar(String nombre) async {
     return await showDialog<bool>(
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: const Text(
-                'Eliminar material',
-              ),
-              content: Text(
-                '¿Eliminar "$nombre"?',
-              ),
+              title: const Text('Eliminar material'),
+              content: Text('¿Eliminar "$nombre"?'),
               actions: [
                 TextButton(
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                      false,
-                    );
-                  },
-                  child:
-                      const Text('Cancelar'),
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('Cancelar'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                      true,
-                    );
-                  },
-                  child:
-                      const Text('Eliminar'),
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('Eliminar'),
                 ),
               ],
             );
@@ -317,110 +173,69 @@ class _MaterialesScreenState
         false;
   }
 
-  double get total {
-    return widget.obra.materiales.fold(
-      0,
-      (sum, material) =>
-          sum + material.total,
-    );
-  }
-
-  double get totalConIva {
-    return widget.obra.materiales.fold(
-      0,
-      (sum, material) =>
-          sum + material.totalConIva,
-    );
-  }
+  double get total => widget.obra.materiales.fold(0, (sum, m) => sum + m.total);
+  double get totalConIva => widget.obra.materiales.fold(0, (sum, m) => sum + m.totalConIva);
 
   @override
   Widget build(BuildContext context) {
-    final materiales =
-        widget.obra.materiales;
+    final materiales = widget.obra.materiales;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Materiales'),
+        centerTitle: true,
+        backgroundColor: const Color(0xFFF2F3F5),
+        surfaceTintColor: Colors.transparent,
+        elevation: 2,
+        title: const Text(
+          'Materiales',
+          style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),
+        ),
       ),
       body: Column(
         children: [
           Expanded(
             child: materiales.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No hay materiales',
-                    ),
-                  )
+                ? const Center(child: Text('No hay materiales'))
                 : ListView.builder(
-                    itemCount:
-                        materiales.length,
-                    itemBuilder:
-                        (context, index) {
-                      final material =
-                          materiales[index];
+                    padding: const EdgeInsets.only(top: 8, bottom: 16),
+                    itemCount: materiales.length,
+                    itemBuilder: (context, index) {
+                      final material = materiales[index];
 
                       return Card(
-                        margin:
-                            const EdgeInsets
-                                .symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+                        elevation: 0.5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          side: BorderSide(color: Colors.grey.shade200, width: 1),
                         ),
+                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                           title: Text(
                             material.nombre,
+                            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                           ),
-                          subtitle: Text(
-                            '${material.cantidad} x ${material.precioUnidad.toStringAsFixed(2)} €',
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              '${material.cantidad} x ${material.precioUnidad.toStringAsFixed(2)} € = ${material.total.toStringAsFixed(2)} €',
+                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                            ),
                           ),
-                          trailing:
-                              PopupMenuButton<
-                                  String>(
-                            onSelected:
-                                (
-                                  value,
-                                ) async {
-                              if (value ==
-                                  'edit') {
-                                editarMaterial(
-                                  index,
-                                );
-                              }
-
-                              if (value ==
-                                  'delete') {
-                                final borrar =
-                                    await confirmarEliminar(
-                                  material
-                                      .nombre,
-                                );
-
+                          trailing: PopupMenuButton<String>(
+                            icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
+                            onSelected: (value) async {
+                              if (value == 'edit') editarMaterial(index);
+                              if (value == 'delete') {
+                                final borrar = await confirmarEliminar(material.nombre);
                                 if (borrar) {
-                                  setState(() {
-                                    materiales
-                                        .removeAt(
-                                      index,
-                                    );
-                                  });
+                                  setState(() => materiales.removeAt(index));
                                 }
                               }
                             },
-                            itemBuilder:
-                                (_) => const [
-                              PopupMenuItem(
-                                value:
-                                    'edit',
-                                child: Text(
-                                  'Editar',
-                                ),
-                              ),
-                              PopupMenuItem(
-                                value:
-                                    'delete',
-                                child: Text(
-                                  'Eliminar',
-                                ),
-                              ),
+                            itemBuilder: (_) => const [
+                              PopupMenuItem(value: 'edit', child: Text('Editar')),
+                              PopupMenuItem(value: 'delete', child: Text('Eliminar')),
                             ],
                           ),
                         ),
@@ -429,43 +244,53 @@ class _MaterialesScreenState
                   ),
           ),
           Container(
-            padding:
-                const EdgeInsets.all(
-              16,
-            ),
-            child: Column(
-              children: [
-                Text(
-                  'Total: ${total.toStringAsFixed(2)} €',
-                  style:
-                      const TextStyle(
-                    fontSize: 18,
-                    fontWeight:
-                        FontWeight.bold,
-                  ),
+            margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+            child: Card(
+              elevation: 0.5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+                side: BorderSide(color: Colors.grey.shade200, width: 1),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total: ${total.toStringAsFixed(2)} €',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Total + IVA: ${totalConIva.toStringAsFixed(2)} €',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  'Total + IVA: ${totalConIva.toStringAsFixed(2)} €',
-                  style:
-                      const TextStyle(
-                    fontSize: 18,
-                    fontWeight:
-                        FontWeight.bold,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
       ),
-      floatingActionButton:
-          FloatingActionButton(
-        onPressed: crearMaterial,
-        child:
-            const Icon(Icons.add),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 8, bottom: 10),
+        child: SizedBox(
+          width: 54,
+          height: 54,
+          child: FloatingActionButton(
+            onPressed: crearMaterial,
+            child: const Icon(Icons.add, size: 26),
+          ),
+        ),
       ),
     );
   }
