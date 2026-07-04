@@ -1,0 +1,5 @@
+-keep class com.dexterous.** { *; }
+-keep class androidx.** { *; }
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes Exceptions

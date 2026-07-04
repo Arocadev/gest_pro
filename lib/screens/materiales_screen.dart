@@ -197,7 +197,7 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
             child: materiales.isEmpty
                 ? const Center(child: Text('No hay materiales'))
                 : ListView.builder(
-                    padding: const EdgeInsets.only(top: 8, bottom: 16),
+                    padding: const EdgeInsets.only(top: 8, bottom: 80),
                     itemCount: materiales.length,
                     itemBuilder: (context, index) {
                       final material = materiales[index];
