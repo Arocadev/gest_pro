@@ -16,7 +16,8 @@ class FinanzasScreen extends StatelessWidget {
           backgroundColor: const Color(0xFFF2F3F5),
           surfaceTintColor: Colors.transparent,
           elevation: 2,
-          title: Image.asset('assets/logo.png', height: 48, fit: BoxFit.contain),
+          toolbarHeight: 70,
+          title: Image.asset('assets/logo.png', height: 90, fit: BoxFit.contain),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(42),
             child: Material(

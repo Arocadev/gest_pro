@@ -30,7 +30,6 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
 
   void crearProyecto() {
     final controller = TextEditingController();
-
     showDialog(
       context: context,
       builder: (_) {
@@ -42,10 +41,7 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
             autofocus: true,
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
-            ),
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
             ElevatedButton(
               onPressed: () async {
                 if (controller.text.trim().isEmpty) return;
@@ -63,7 +59,6 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
 
   Future<void> editarProyecto(int index) async {
     final controller = TextEditingController(text: proyectos[index].nombre);
-
     await showDialog(
       context: context,
       builder: (_) {
@@ -120,7 +115,8 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
         backgroundColor: const Color(0xFFF2F3F5),
         surfaceTintColor: Colors.transparent,
         elevation: 2,
-        title: Image.asset('assets/logo.png', height: 48, fit: BoxFit.contain),
+        toolbarHeight: 70,
+        title: Image.asset('assets/logo.png', height: 90, fit: BoxFit.contain),
       ),
       body: proyectos.isEmpty
           ? const Center(child: Text('No hay proyectos'))
@@ -129,7 +125,6 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
               itemCount: proyectos.length,
               itemBuilder: (context, index) {
                 final proyecto = proyectos[index];
-
                 return Card(
                   elevation: 0.5,
                   shape: RoundedRectangleBorder(
@@ -195,7 +190,10 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
         child: SizedBox(
           width: 54,
           height: 54,
-          child: FloatingActionButton(onPressed: crearProyecto, child: const Icon(Icons.add, size: 26)),
+          child: FloatingActionButton(
+            onPressed: crearProyecto,
+            child: const Icon(Icons.add, size: 26),
+          ),
         ),
       ),
     );

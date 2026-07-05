@@ -47,8 +47,9 @@ class GestProApp extends StatelessWidget {
       title: 'GestPro',
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2E86AB)),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
       ),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

@@ -33,7 +33,6 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
 
   void cargarEventos() {
     todosEventos.clear();
-
     final proyectos = StorageService.cargarProyectos();
     final pagos = StorageService.cargarPagos();
     final cobros = StorageService.cargarCobros();
@@ -43,31 +42,29 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
         todosEventos.add(EventoCalendario(
           fecha: proyecto.fechaInicio!,
           titulo: 'Inicio: ${proyecto.nombre}',
-          colorValue: Colors.green.value,
+          colorValue: Colors.green.toARGB32(),
         ));
       }
       if (proyecto.fechaFin != null) {
         todosEventos.add(EventoCalendario(
           fecha: proyecto.fechaFin!,
           titulo: 'Fin: ${proyecto.nombre}',
-          colorValue: Colors.red.value,
+          colorValue: Colors.red.toARGB32(),
         ));
       }
-
-      // Tareas con fecha
       for (final tarea in proyecto.tareas) {
         if (tarea.fechaInicio != null) {
           todosEventos.add(EventoCalendario(
             fecha: tarea.fechaInicio!,
             titulo: '▶ ${tarea.nombre} (${proyecto.nombre})',
-            colorValue: Colors.teal.value,
+            colorValue: Colors.indigo.toARGB32(),
           ));
         }
         if (tarea.fechaLimite != null) {
           todosEventos.add(EventoCalendario(
             fecha: tarea.fechaLimite!,
             titulo: '⚑ ${tarea.nombre} (${proyecto.nombre})',
-            colorValue: Colors.deepOrange.value,
+            colorValue: Colors.deepOrange.toARGB32(),
           ));
         }
       }
@@ -78,7 +75,7 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
         todosEventos.add(EventoCalendario(
           fecha: pago.fecha,
           titulo: 'Pago a ${pago.persona} - ${pago.importe.toStringAsFixed(2)} €',
-          colorValue: Colors.orange.value,
+          colorValue: Colors.orange.toARGB32(),
         ));
       }
     }
@@ -91,7 +88,7 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
       todosEventos.add(EventoCalendario(
         fecha: cobro.fecha,
         titulo: 'Cobro $nombreProyecto - ${cobro.importe.toStringAsFixed(2)} €',
-        colorValue: Colors.blue.value,
+        colorValue: Colors.blue.toARGB32(),
       ));
     }
 
@@ -189,7 +186,7 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
                     await box.add(EventoCalendario(
                       fecha: fechaSeleccionada,
                       titulo: tituloController.text.trim(),
-                      colorValue: Colors.purple.value,
+                      colorValue: Colors.purple.toARGB32(),
                     ));
                     if (!context.mounted) return;
                     Navigator.pop(context);
@@ -225,7 +222,8 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
         backgroundColor: const Color(0xFFF2F3F5),
         surfaceTintColor: Colors.transparent,
         elevation: 2,
-        title: Image.asset('assets/logo.png', height: 48, fit: BoxFit.contain),
+        toolbarHeight: 70,
+        title: Image.asset('assets/logo.png', height: 90, fit: BoxFit.contain),
       ),
       body: Column(
         children: [
@@ -312,8 +310,6 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
                                   Navigator.pop(context);
                                   await crearEventoLibre(selectedDay);
                                 },
-                                backgroundColor: Colors.orange,
-                                foregroundColor: Colors.white,
                                 child: const Icon(Icons.add, size: 26),
                               ),
                             ),
@@ -336,7 +332,7 @@ class _CalendarioScreenState extends State<CalendarioScreen> {
                   child: Container(
                     width: texto.length > 1 ? 36 : 30,
                     height: 30,
-                    decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                    decoration: const BoxDecoration(color: Colors.teal, shape: BoxShape.circle),
                     child: Center(
                       child: Text(texto, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                     ),

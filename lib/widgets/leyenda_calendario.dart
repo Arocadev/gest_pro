@@ -25,7 +25,7 @@ class LeyendaCalendario extends StatelessWidget {
         children: [
           item(Colors.green, 'Inicio proyecto'),
           item(Colors.red, 'Fin proyecto'),
-          item(Colors.teal, 'Inicio tarea'),
+          item(Colors.indigo, 'Inicio tarea'),
           item(Colors.deepOrange, 'Límite tarea'),
           item(Colors.orange, 'Pago'),
           item(Colors.blue, 'Cobro'),

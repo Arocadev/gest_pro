@@ -87,7 +87,11 @@ class EstadisticasScreen extends StatelessWidget {
     int tareasPendientes = 0;
     for (final p in proyectos) {
       for (final tarea in p.tareas) {
-        if (tarea.hecha) tareasHechas++; else tareasPendientes++;
+        if (tarea.hecha) {
+          tareasHechas++;
+        } else {
+          tareasPendientes++;
+        }
       }
     }
 
@@ -95,9 +99,8 @@ class EstadisticasScreen extends StatelessWidget {
     final nEnCurso = proyectos.where((p) => p.estado == 'En curso').length;
     final nTerminados = proyectos.where((p) => p.estado == 'Terminado').length;
 
-    // yLimit dinámico — intervalo proporcional al máximo
-    final double maxVal = [presupuesto, cobrado, pendiente, materiales, beneficio > 0 ? beneficio : 0]
-        .fold<double>(0.0, (a, b) => a > b ? a : b);
+    final double maxVal = [presupuesto, cobrado, pendiente, materiales, beneficio > 0 ? beneficio : 0.0]
+        .fold<double>(0.0, (a, b) => (a > b ? a : b).toDouble());
     final double intervalo = maxVal <= 1000 ? 200
         : maxVal <= 5000 ? 500
         : maxVal <= 20000 ? 2000
@@ -167,8 +170,8 @@ class EstadisticasScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFF2F3F5),
         surfaceTintColor: Colors.transparent,
         elevation: 2,
-        toolbarHeight: 64,
-        title: Image.asset('assets/logo.png', height: 52, fit: BoxFit.contain),
+        toolbarHeight: 70,
+        title: Image.asset('assets/logo.png', height: 90, fit: BoxFit.contain),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
