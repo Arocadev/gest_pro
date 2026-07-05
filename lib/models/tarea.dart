@@ -10,8 +10,16 @@ class Tarea extends HiveObject {
   @HiveField(1)
   bool hecha;
 
+  @HiveField(2)
+  DateTime? fechaInicio;
+
+  @HiveField(3)
+  DateTime? fechaLimite;
+
   Tarea({
     required this.nombre,
     this.hecha = false,
+    this.fechaInicio,
+    this.fechaLimite,
   });
 }

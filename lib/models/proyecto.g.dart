@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'obra.dart';
+part of 'proyecto.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ObraAdapter extends TypeAdapter<Obra> {
+class ProyectoAdapter extends TypeAdapter<Proyecto> {
   @override
   final int typeId = 2;
 
   @override
-  Obra read(BinaryReader reader) {
+  Proyecto read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Obra(
+    return Proyecto(
       nombre: fields[0] as String,
       presupuesto: fields[1] as double,
       cobrado: fields[2] as double,
@@ -25,12 +25,12 @@ class ObraAdapter extends TypeAdapter<Obra> {
       fechaFin: fields[7] as DateTime?,
       id: fields[8] as String?,
       tareas: (fields[3] as List?)?.cast<Tarea>(),
-      materiales: (fields[4] as List?)?.cast<MaterialObra>(),
+      materiales: (fields[4] as List?)?.cast<MaterialProyecto>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, Obra obj) {
+  void write(BinaryWriter writer, Proyecto obj) {
     writer
       ..writeByte(9)
       ..writeByte(0)
@@ -59,7 +59,7 @@ class ObraAdapter extends TypeAdapter<Obra> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ObraAdapter &&
+      other is ProyectoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

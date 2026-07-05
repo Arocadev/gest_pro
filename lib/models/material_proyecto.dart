@@ -1,9 +1,9 @@
 import 'package:hive/hive.dart';
 
-part 'material_obra.g.dart';
+part 'material_proyecto.g.dart';
 
 @HiveType(typeId: 1)
-class MaterialObra extends HiveObject {
+class MaterialProyecto extends HiveObject {
   @HiveField(0)
   String nombre;
 
@@ -13,15 +13,13 @@ class MaterialObra extends HiveObject {
   @HiveField(2)
   double precioUnidad;
 
-  MaterialObra({
+  MaterialProyecto({
     required this.nombre,
     required this.cantidad,
     required this.precioUnidad,
   });
 
-  double get total =>
-      cantidad * precioUnidad;
+  double get total => cantidad * precioUnidad;
 
-  double get totalConIva =>
-      total * 1.21;
+  double get totalConIva => total * 1.21;
 }

@@ -16,10 +16,7 @@ class FinanzasScreen extends StatelessWidget {
           backgroundColor: const Color(0xFFF2F3F5),
           surfaceTintColor: Colors.transparent,
           elevation: 2,
-          title: const Text(
-            'Finanzas',
-            style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),
-          ),
+          title: Image.asset('assets/logo.png', height: 48, fit: BoxFit.contain),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(42),
             child: Material(
@@ -34,24 +31,13 @@ class FinanzasScreen extends StatelessWidget {
                 ),
                 child: Stack(
                   children: [
-                    Center(
-                      child: Container(width: 1, color: Colors.grey.shade300),
-                    ),
+                    Center(child: Container(width: 1, color: Colors.grey.shade300)),
                     const TabBar(
                       dividerColor: Colors.transparent,
                       indicatorWeight: 3,
-                      labelStyle: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                      ),
-                      unselectedLabelStyle: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                      ),
-                      tabs: [
-                        Tab(text: 'Pagos'),
-                        Tab(text: 'Cobros'),
-                      ],
+                      labelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                      tabs: [Tab(text: 'Pagos'), Tab(text: 'Cobros')],
                     ),
                   ],
                 ),
@@ -60,10 +46,7 @@ class FinanzasScreen extends StatelessWidget {
           ),
         ),
         body: const TabBarView(
-          children: [
-            PagosScreen(),
-            CobrosScreen(),
-          ],
+          children: [PagosScreen(), CobrosScreen()],
         ),
       ),
     );

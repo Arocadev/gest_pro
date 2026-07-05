@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/cobro.dart';
-import '../models/obra.dart';
+import '../models/proyecto.dart';
 import '../services/storage_service.dart';
 
 class CobrosScreen extends StatefulWidget {
@@ -13,26 +13,26 @@ class CobrosScreen extends StatefulWidget {
 
 class _CobrosScreenState extends State<CobrosScreen> {
   List<Cobro> cobros = [];
-  List<Obra> obras = [];
+  List<Proyecto> proyectos = [];
 
   @override
   void initState() {
     super.initState();
     cobros = StorageService.cargarCobros();
-    obras = StorageService.cargarObras();
+    proyectos = StorageService.cargarProyectos();
   }
 
   Future<void> guardar() async {
-    for (final obra in obras) {
-      obra.cobrado = cobros
-          .where((c) => c.obraId == obra.id)
+    for (final proyecto in proyectos) {
+      proyecto.cobrado = cobros
+          .where((c) => c.proyectoId == proyecto.id)
           .fold(0.0, (s, c) => s + c.importe);
     }
     await StorageService.guardarCobros(cobros);
-    await StorageService.guardarObras(obras);
+    await StorageService.guardarProyectos(proyectos);
   }
 
-  Future<bool> confirmarEliminar(Cobro cobro) async {
+  Future<bool> confirmarEliminar() async {
     return await showDialog<bool>(
           context: context,
           builder: (_) {
@@ -62,11 +62,11 @@ class _CobrosScreenState extends State<CobrosScreen> {
     final conceptoController = TextEditingController(text: editar?.concepto ?? '');
 
     DateTime fecha = editar?.fecha ?? DateTime.now();
-    Obra? obraSeleccionada;
+    Proyecto? proyectoSeleccionado;
 
     if (editar != null) {
       try {
-        obraSeleccionada = obras.firstWhere((o) => o.id == editar.obraId);
+        proyectoSeleccionado = proyectos.firstWhere((p) => p.id == editar.proyectoId);
       } catch (_) {}
     }
 
@@ -81,18 +81,13 @@ class _CobrosScreenState extends State<CobrosScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    DropdownButtonFormField<Obra>(
-                      initialValue: obraSeleccionada,
-                      decoration: const InputDecoration(labelText: 'Obra'),
-                      items: obras.map((obra) {
-                        return DropdownMenuItem(
-                          value: obra,
-                          child: Text(obra.nombre),
-                        );
+                    DropdownButtonFormField<Proyecto>(
+                      initialValue: proyectoSeleccionado,
+                      decoration: const InputDecoration(labelText: 'Proyecto'),
+                      items: proyectos.map((p) {
+                        return DropdownMenuItem(value: p, child: Text(p.nombre));
                       }).toList(),
-                      onChanged: (value) {
-                        setDialogState(() => obraSeleccionada = value);
-                      },
+                      onChanged: (value) => setDialogState(() => proyectoSeleccionado = value),
                     ),
                     const SizedBox(height: 12),
                     TextField(
@@ -118,9 +113,7 @@ class _CobrosScreenState extends State<CobrosScreen> {
                           firstDate: DateTime(2020),
                           lastDate: DateTime(2100),
                         );
-                        if (nueva != null) {
-                          setDialogState(() => fecha = nueva);
-                        }
+                        if (nueva != null) setDialogState(() => fecha = nueva);
                       },
                     ),
                   ],
@@ -133,30 +126,20 @@ class _CobrosScreenState extends State<CobrosScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if (obraSeleccionada == null ||
-                        importeController.text.trim().isEmpty) {
-                      return;
-                    }
-
-                    final importe = double.tryParse(
-                          importeController.text.replaceAll(',', '.'),
-                        ) ?? 0;
-
+                    if (proyectoSeleccionado == null || importeController.text.trim().isEmpty) return;
+                    final importe = double.tryParse(importeController.text.replaceAll(',', '.')) ?? 0;
                     final cobro = Cobro(
-                      obraId: obraSeleccionada!.id,
+                      proyectoId: proyectoSeleccionado!.id,
                       importe: importe,
                       fecha: fecha,
                       concepto: conceptoController.text.trim(),
                     );
-
                     if (editar == null) {
                       cobros.add(cobro);
                     } else {
                       cobros[indexEditar!] = cobro;
                     }
-
                     await guardar();
-
                     if (!context.mounted) return;
                     setState(() {});
                     Navigator.pop(context);
@@ -199,21 +182,14 @@ class _CobrosScreenState extends State<CobrosScreen> {
                           children: const [
                             Icon(Icons.payments, color: Colors.blue, size: 16),
                             SizedBox(width: 6),
-                            Text(
-                              'Cobrado',
-                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                            ),
+                            Text('Cobrado', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Text(
                           '${total.toStringAsFixed(2)} €',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
                         ),
                       ],
                     ),
@@ -230,10 +206,9 @@ class _CobrosScreenState extends State<CobrosScreen> {
                     itemCount: cobros.length,
                     itemBuilder: (context, index) {
                       final cobro = cobros[index];
-
-                      Obra? obra;
+                      Proyecto? proyecto;
                       try {
-                        obra = obras.firstWhere((o) => o.id == cobro.obraId);
+                        proyecto = proyectos.firstWhere((p) => p.id == cobro.proyectoId);
                       } catch (_) {}
 
                       return Card(
@@ -244,17 +219,11 @@ class _CobrosScreenState extends State<CobrosScreen> {
                         ),
                         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 4,
-                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                           leading: const Icon(Icons.payments, color: Colors.blue),
                           title: Text(
-                            obra?.nombre ?? 'Obra eliminada',
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            proyecto?.nombre ?? 'Proyecto eliminado',
+                            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 4),
@@ -263,32 +232,24 @@ class _CobrosScreenState extends State<CobrosScreen> {
                               children: [
                                 Text(
                                   '${cobro.importe.toStringAsFixed(2)} €',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.blue,
-                                  ),
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.blue),
                                 ),
                                 Text(
                                   '${cobro.fecha.day}/${cobro.fecha.month}/${cobro.fecha.year}',
                                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                                 ),
                                 if (cobro.concepto.isNotEmpty)
-                                  Text(
-                                    cobro.concepto,
-                                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                                  ),
+                                  Text(cobro.concepto,
+                                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
                               ],
                             ),
                           ),
                           trailing: PopupMenuButton<String>(
                             icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
                             onSelected: (value) async {
-                              if (value == 'edit') {
-                                await crearCobro(editar: cobro, indexEditar: index);
-                              }
+                              if (value == 'edit') await crearCobro(editar: cobro, indexEditar: index);
                               if (value == 'delete') {
-                                final borrar = await confirmarEliminar(cobro);
+                                final borrar = await confirmarEliminar();
                                 if (borrar) {
                                   cobros.removeAt(index);
                                   await guardar();

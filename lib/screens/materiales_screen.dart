@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/material_obra.dart';
-import '../models/obra.dart';
+import '../models/material_proyecto.dart';
+import '../models/proyecto.dart';
 
 class MaterialesScreen extends StatefulWidget {
-  final Obra obra;
+  final Proyecto proyecto;
 
-  const MaterialesScreen({super.key, required this.obra});
+  const MaterialesScreen({super.key, required this.proyecto});
 
   @override
   State<MaterialesScreen> createState() => _MaterialesScreenState();
@@ -26,50 +26,28 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  controller: nombreController,
-                  decoration: const InputDecoration(labelText: 'Nombre'),
-                ),
+                TextField(controller: nombreController, decoration: const InputDecoration(labelText: 'Nombre')),
                 const SizedBox(height: 12),
-                TextField(
-                  controller: cantidadController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(labelText: 'Cantidad'),
-                ),
+                TextField(controller: cantidadController, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Cantidad')),
                 const SizedBox(height: 12),
-                TextField(
-                  controller: precioController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(labelText: 'Precio unidad (€)'),
-                ),
+                TextField(controller: precioController, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Precio unidad (€)')),
               ],
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
-            ),
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
             ElevatedButton(
               onPressed: () {
                 if (nombreController.text.trim().isEmpty) return;
-
-                final cantidad = double.tryParse(
-                      cantidadController.text.replaceAll(',', '.'),
-                    ) ?? 0;
-
-                final precio = double.tryParse(
-                      precioController.text.replaceAll(',', '.'),
-                    ) ?? 0;
-
+                final cantidad = double.tryParse(cantidadController.text.replaceAll(',', '.')) ?? 0;
+                final precio = double.tryParse(precioController.text.replaceAll(',', '.')) ?? 0;
                 setState(() {
-                  widget.obra.materiales.add(MaterialObra(
+                  widget.proyecto.materiales.add(MaterialProyecto(
                     nombre: nombreController.text.trim(),
                     cantidad: cantidad,
                     precioUnidad: precio,
                   ));
                 });
-
                 Navigator.pop(context);
               },
               child: const Text('Guardar'),
@@ -81,15 +59,10 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
   }
 
   void editarMaterial(int index) {
-    final material = widget.obra.materiales[index];
-
+    final material = widget.proyecto.materiales[index];
     final nombreController = TextEditingController(text: material.nombre);
-    final cantidadController = TextEditingController(
-      text: material.cantidad == 0 ? '' : material.cantidad.toString(),
-    );
-    final precioController = TextEditingController(
-      text: material.precioUnidad == 0 ? '' : material.precioUnidad.toString(),
-    );
+    final cantidadController = TextEditingController(text: material.cantidad == 0 ? '' : material.cantidad.toString());
+    final precioController = TextEditingController(text: material.precioUnidad == 0 ? '' : material.precioUnidad.toString());
 
     showDialog(
       context: context,
@@ -100,46 +73,25 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  controller: nombreController,
-                  decoration: const InputDecoration(labelText: 'Nombre'),
-                ),
+                TextField(controller: nombreController, decoration: const InputDecoration(labelText: 'Nombre')),
                 const SizedBox(height: 12),
-                TextField(
-                  controller: cantidadController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(labelText: 'Cantidad'),
-                ),
+                TextField(controller: cantidadController, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Cantidad')),
                 const SizedBox(height: 12),
-                TextField(
-                  controller: precioController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(labelText: 'Precio unidad (€)'),
-                ),
+                TextField(controller: precioController, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Precio unidad (€)')),
               ],
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
-            ),
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
             ElevatedButton(
               onPressed: () {
-                final cantidad = double.tryParse(
-                      cantidadController.text.replaceAll(',', '.'),
-                    ) ?? 0;
-
-                final precio = double.tryParse(
-                      precioController.text.replaceAll(',', '.'),
-                    ) ?? 0;
-
+                final cantidad = double.tryParse(cantidadController.text.replaceAll(',', '.')) ?? 0;
+                final precio = double.tryParse(precioController.text.replaceAll(',', '.')) ?? 0;
                 setState(() {
                   material.nombre = nombreController.text.trim();
                   material.cantidad = cantidad;
                   material.precioUnidad = precio;
                 });
-
                 Navigator.pop(context);
               },
               child: const Text('Guardar'),
@@ -158,27 +110,20 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
               title: const Text('Eliminar material'),
               content: Text('¿Eliminar "$nombre"?'),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancelar'),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Eliminar'),
-                ),
+                TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+                ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Eliminar')),
               ],
             );
           },
-        ) ??
-        false;
+        ) ?? false;
   }
 
-  double get total => widget.obra.materiales.fold(0, (sum, m) => sum + m.total);
-  double get totalConIva => widget.obra.materiales.fold(0, (sum, m) => sum + m.totalConIva);
+  double get total => widget.proyecto.materiales.fold<double>(0, (sum, m) => sum + m.total);
+  double get totalConIva => widget.proyecto.materiales.fold<double>(0, (sum, m) => sum + m.totalConIva);
 
   @override
   Widget build(BuildContext context) {
-    final materiales = widget.obra.materiales;
+    final materiales = widget.proyecto.materiales;
 
     return Scaffold(
       appBar: AppBar(
@@ -186,10 +131,7 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
         backgroundColor: const Color(0xFFF2F3F5),
         surfaceTintColor: Colors.transparent,
         elevation: 2,
-        title: const Text(
-          'Materiales',
-          style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),
-        ),
+        title: const Text('Materiales', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600)),
       ),
       body: Column(
         children: [
@@ -201,7 +143,6 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
                     itemCount: materiales.length,
                     itemBuilder: (context, index) {
                       final material = materiales[index];
-
                       return Card(
                         elevation: 0.5,
                         shape: RoundedRectangleBorder(
@@ -211,10 +152,7 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
                         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                          title: Text(
-                            material.nombre,
-                            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-                          ),
+                          title: Text(material.nombre, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 4),
                             child: Text(
@@ -228,9 +166,7 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
                               if (value == 'edit') editarMaterial(index);
                               if (value == 'delete') {
                                 final borrar = await confirmarEliminar(material.nombre);
-                                if (borrar) {
-                                  setState(() => materiales.removeAt(index));
-                                }
+                                if (borrar) setState(() => materiales.removeAt(index));
                               }
                             },
                             itemBuilder: (_) => const [
@@ -258,20 +194,12 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
                   children: [
                     Text(
                       'Total: ${total.toStringAsFixed(2)} €',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Total + IVA: ${totalConIva.toStringAsFixed(2)} €',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
+                      'Total + IVA (21%): ${totalConIva.toStringAsFixed(2)} €',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey.shade600),
                     ),
                   ],
                 ),
@@ -286,10 +214,7 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
         child: SizedBox(
           width: 54,
           height: 54,
-          child: FloatingActionButton(
-            onPressed: crearMaterial,
-            child: const Icon(Icons.add, size: 26),
-          ),
+          child: FloatingActionButton(onPressed: crearMaterial, child: const Icon(Icons.add, size: 26)),
         ),
       ),
     );

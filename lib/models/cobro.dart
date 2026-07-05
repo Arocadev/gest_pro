@@ -5,7 +5,7 @@ part 'cobro.g.dart';
 @HiveType(typeId: 4)
 class Cobro extends HiveObject {
   @HiveField(0)
-  String obraId;
+  String proyectoId;
 
   @HiveField(1)
   double importe;
@@ -17,7 +17,7 @@ class Cobro extends HiveObject {
   String concepto;
 
   Cobro({
-    required this.obraId,
+    required this.proyectoId,
     required this.importe,
     required this.fecha,
     this.concepto = '',

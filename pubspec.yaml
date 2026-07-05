@@ -1,5 +1,5 @@
-name: obra_control
-description: "ObrasControl es una app de gestión de obras y finanzas para profesionales de la construcción. Permite controlar obras, tareas, materiales, pagos, cobros, calendario y recordatorios desde el móvil."
+name: gest_pro
+description: "GestPro es una app móvil de gestión de proyectos y finanzas. Controla proyectos, tareas, materiales, pagos, cobros, calendario y eventos desde el móvil."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -10,10 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   flutter_localizations:
     sdk: flutter
-
   cupertino_icons: ^1.0.8
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -23,8 +21,6 @@ dependencies:
   path_provider: ^2.1.4
   file_selector: ^1.0.3
   table_calendar: ^3.2.0
-  flutter_local_notifications: ^17.2.1
-  timezone: ^0.9.4
   google_fonts: ^6.3.0
   fl_chart: ^1.0.0
 
@@ -40,11 +36,10 @@ flutter_launcher_icons:
   android: true
   ios: false
   image_path: "assets/icono.png"
-  adaptive_icon_background: "#FAF0E6"
-  adaptive_icon_foreground: "assets/icono.png"
 
 flutter:
   uses-material-design: true
   assets:
     - assets/icono.png
     - assets/splash.png
+    - assets/logo.png

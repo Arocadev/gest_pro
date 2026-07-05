@@ -1,12 +1,12 @@
 import 'package:hive/hive.dart';
 
-import 'material_obra.dart';
+import 'material_proyecto.dart';
 import 'tarea.dart';
 
-part 'obra.g.dart';
+part 'proyecto.g.dart';
 
 @HiveType(typeId: 2)
-class Obra extends HiveObject {
+class Proyecto extends HiveObject {
   @HiveField(0)
   String nombre;
 
@@ -20,7 +20,7 @@ class Obra extends HiveObject {
   List<Tarea> tareas;
 
   @HiveField(4)
-  List<MaterialObra> materiales;
+  List<MaterialProyecto> materiales;
 
   @HiveField(5)
   String estado;
@@ -34,7 +34,7 @@ class Obra extends HiveObject {
   @HiveField(8)
   String id;
 
-  Obra({
+  Proyecto({
     required this.nombre,
     this.presupuesto = 0,
     this.cobrado = 0,
@@ -43,11 +43,8 @@ class Obra extends HiveObject {
     this.fechaFin,
     String? id,
     List<Tarea>? tareas,
-    List<MaterialObra>? materiales,
-  })  : id = id ??
-            DateTime.now()
-                .microsecondsSinceEpoch
-                .toString(),
+    List<MaterialProyecto>? materiales,
+  })  : id = id ?? DateTime.now().microsecondsSinceEpoch.toString(),
         tareas = tareas ?? [],
         materiales = materiales ?? [];
 }

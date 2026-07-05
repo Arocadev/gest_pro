@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../models/obra.dart';
+import '../models/proyecto.dart';
 import '../services/pdf_service.dart';
 import 'economia_screen.dart';
 import 'materiales_screen.dart';
 import 'tareas_screen.dart';
 
-class DetalleObraScreen extends StatefulWidget {
-  final Obra obra;
+class DetalleProyectoScreen extends StatefulWidget {
+  final Proyecto proyecto;
 
-  const DetalleObraScreen({super.key, required this.obra});
+  const DetalleProyectoScreen({super.key, required this.proyecto});
 
   @override
-  State<DetalleObraScreen> createState() => _DetalleObraScreenState();
+  State<DetalleProyectoScreen> createState() => _DetalleProyectoScreenState();
 }
 
-class _DetalleObraScreenState extends State<DetalleObraScreen> {
+class _DetalleProyectoScreenState extends State<DetalleProyectoScreen> {
   Future<void> editarEstado() async {
-    String estado = widget.obra.estado;
+    String estado = widget.proyecto.estado;
 
     await showDialog(
       context: context,
@@ -26,14 +26,14 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: const Text('Estado de la obra'),
+              title: const Text('Estado del proyecto'),
               content: DropdownButton<String>(
                 value: estado,
                 isExpanded: true,
                 items: const [
                   DropdownMenuItem(value: 'Pendiente', child: Text('Pendiente')),
                   DropdownMenuItem(value: 'En curso', child: Text('En curso')),
-                  DropdownMenuItem(value: 'Terminada', child: Text('Terminada')),
+                  DropdownMenuItem(value: 'Terminado', child: Text('Terminado')),
                 ],
                 onChanged: (value) {
                   if (value == null) return;
@@ -47,7 +47,7 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() => widget.obra.estado = estado);
+                    setState(() => widget.proyecto.estado = estado);
                     Navigator.pop(context);
                   },
                   child: const Text('Guardar'),
@@ -63,21 +63,21 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
   Future<void> seleccionarFechaInicio() async {
     final fecha = await showDatePicker(
       context: context,
-      initialDate: widget.obra.fechaInicio ?? DateTime.now(),
+      initialDate: widget.proyecto.fechaInicio ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
     );
-    if (fecha != null) setState(() => widget.obra.fechaInicio = fecha);
+    if (fecha != null) setState(() => widget.proyecto.fechaInicio = fecha);
   }
 
   Future<void> seleccionarFechaFin() async {
     final fecha = await showDatePicker(
       context: context,
-      initialDate: widget.obra.fechaFin ?? DateTime.now(),
+      initialDate: widget.proyecto.fechaFin ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
     );
-    if (fecha != null) setState(() => widget.obra.fechaFin = fecha);
+    if (fecha != null) setState(() => widget.proyecto.fechaFin = fecha);
   }
 
   String textoFecha(DateTime? fecha) {
@@ -103,16 +103,10 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
         leading: Icon(icono, color: iconColor),
-        title: Text(
-          titulo,
-          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-        ),
+        title: Text(titulo, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            subtitulo,
-            style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
-          ),
+          child: Text(subtitulo, style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
         ),
         trailing: trailing ?? (onTap != null ? Icon(Icons.chevron_right, color: Colors.grey.shade400) : null),
         onTap: onTap,
@@ -122,8 +116,8 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final obra = widget.obra;
-    final tareasPendientes = obra.tareas.where((t) => !t.hecha).length;
+    final proyecto = widget.proyecto;
+    final tareasPendientes = proyecto.tareas.where((t) => !t.hecha).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +126,7 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
         surfaceTintColor: Colors.transparent,
         elevation: 2,
         title: Text(
-          obra.nombre,
+          proyecto.nombre,
           style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w600),
         ),
         actions: [
@@ -141,11 +135,11 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
             child: IconButton(
               icon: const Icon(Icons.picture_as_pdf),
               onPressed: () async {
-                final file = await PdfService.guardarPdf(obra);
+                final file = await PdfService.guardarPdf(proyecto);
                 await Share.shareXFiles(
                   [XFile(file.path)],
-                  text: 'Resumen de la obra ${obra.nombre}',
-                  subject: 'Resumen de obra',
+                  text: 'Resumen del proyecto ${proyecto.nombre}',
+                  subject: 'Resumen de proyecto',
                 );
               },
             ),
@@ -157,13 +151,13 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
         children: [
           filaDetalle(
             icono: Icons.pending_actions,
-            iconColor: obra.estado == 'En curso'
+            iconColor: proyecto.estado == 'En curso'
                 ? Colors.orange
-                : obra.estado == 'Terminada'
+                : proyecto.estado == 'Terminado'
                     ? Colors.green
                     : Colors.grey,
             titulo: 'Estado',
-            subtitulo: obra.estado,
+            subtitulo: proyecto.estado,
             trailing: PopupMenuButton<String>(
               icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
               onSelected: (value) {
@@ -178,14 +172,14 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
             icono: Icons.calendar_month,
             iconColor: Colors.indigo,
             titulo: 'Fecha inicio',
-            subtitulo: textoFecha(obra.fechaInicio),
+            subtitulo: textoFecha(proyecto.fechaInicio),
             onTap: seleccionarFechaInicio,
           ),
           filaDetalle(
             icono: Icons.event_available,
             iconColor: Colors.indigo,
             titulo: 'Fecha fin',
-            subtitulo: textoFecha(obra.fechaFin),
+            subtitulo: textoFecha(proyecto.fechaFin),
             onTap: seleccionarFechaFin,
           ),
           filaDetalle(
@@ -196,7 +190,7 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
             onTap: () async {
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => TareasScreen(obra: obra)),
+                MaterialPageRoute(builder: (_) => TareasScreen(proyecto: proyecto)),
               );
               setState(() {});
             },
@@ -205,11 +199,11 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
             icono: Icons.inventory,
             iconColor: Colors.red,
             titulo: 'Materiales',
-            subtitulo: '${obra.materiales.length} materiales',
+            subtitulo: '${proyecto.materiales.length} materiales',
             onTap: () async {
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => MaterialesScreen(obra: obra)),
+                MaterialPageRoute(builder: (_) => MaterialesScreen(proyecto: proyecto)),
               );
               setState(() {});
             },
@@ -218,11 +212,11 @@ class _DetalleObraScreenState extends State<DetalleObraScreen> {
             icono: Icons.euro,
             iconColor: Colors.green,
             titulo: 'Economía',
-            subtitulo: 'Presupuesto: ${obra.presupuesto.toStringAsFixed(0)} €',
+            subtitulo: 'Presupuesto: ${proyecto.presupuesto.toStringAsFixed(0)} €',
             onTap: () async {
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => EconomiaScreen(obra: obra)),
+                MaterialPageRoute(builder: (_) => EconomiaScreen(proyecto: proyecto)),
               );
               setState(() {});
             },

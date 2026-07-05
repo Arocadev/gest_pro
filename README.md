@@ -1,25 +1,25 @@
-# ObrasControl
+# GestPro
 
-App móvil de gestión de obras y finanzas para profesionales de la construcción | Mobile app for construction work and finance management
+App móvil de gestión de proyectos y finanzas | Mobile app for project and finance management
 
 ---
 
 🇪🇸 **Español**
 
-ObrasControl es una aplicación Android para gestionar obras, tareas, materiales, pagos, cobros, calendario y recordatorios desde el móvil. Diseñada para autónomos y pequeñas empresas del sector de la construcción.
+GestPro es una aplicación Android para gestionar proyectos, tareas, materiales, pagos, cobros, calendario y eventos desde el móvil. Diseñada para autónomos y pequeñas empresas que necesitan controlar su actividad desde el móvil.
 
 ## ✨ Funcionalidades
 
-🏗️ **Gestión de obras** — crea y organiza tus obras con estado, fechas de inicio y fin  
-✅ **Tareas** — lista de tareas por obra con seguimiento de completadas y pendientes  
+📁 **Gestión de proyectos** — crea y organiza tus proyectos con estado, fechas de inicio y fin  
+✅ **Tareas** — lista de tareas por proyecto con seguimiento de completadas y pendientes  
 🧱 **Materiales** — registro de materiales con cantidad, precio unitario, total e IVA  
-💶 **Economía** — presupuesto, cobrado, pendiente, gastos y beneficio estimado por obra  
-💸 **Pagos** — control de pagos a trabajadores con estado pagado/pendiente  
-🏦 **Cobros** — registro de cobros por obra con concepto y fecha  
-📊 **Resumen** — dashboard con totales globales, gráfica circular y gráfica de barras  
-📅 **Calendario** — vista mensual con eventos de obras, pagos, cobros y recordatorios  
-🔔 **Recordatorios** — avisos con notificación 1 día antes, 6 horas antes y 1 hora antes  
-📄 **PDF** — genera y comparte un resumen en PDF de cada obra  
+💶 **Economía** — presupuesto, cobrado, pendiente, gastos y beneficio estimado por proyecto  
+💸 **Pagos** — control de pagos con estado pagado/pendiente  
+🏦 **Cobros** — registro de cobros por proyecto con concepto y fecha  
+📊 **Resumen** — dashboard con totales globales, 5 gráficas interactivas y explicaciones  
+📅 **Calendario** — vista mensual con eventos de proyectos, pagos, cobros y eventos libres  
+🗓️ **Eventos** — crea eventos personalizados directamente desde el calendario  
+📄 **PDF** — genera y comparte un resumen en PDF de cada proyecto  
 💾 **Backup** — exporta e importa todos los datos en formato JSON  
 
 ## 🛠️ Stack tecnológico
@@ -30,7 +30,6 @@ ObrasControl es una aplicación Android para gestionar obras, tareas, materiales
 | Base de datos local | Hive |
 | Gráficas | fl_chart |
 | Calendario | table_calendar |
-| Notificaciones | flutter_local_notifications |
 | PDF | pdf + printing |
 | Fuentes | Google Fonts (Inter) |
 | Backup | share_plus + file_selector |
@@ -40,17 +39,17 @@ ObrasControl es una aplicación Android para gestionar obras, tareas, materiales
 ```
 lib/
 ├── models/
-│   ├── obra.dart
+│   ├── proyecto.dart
 │   ├── tarea.dart
-│   ├── material_obra.dart
+│   ├── material_proyecto.dart
 │   ├── pago.dart
 │   ├── cobro.dart
-│   ├── recordatorio.dart
 │   └── evento_calendario.dart
 ├── screens/
 │   ├── home_screen.dart
-│   ├── obras_screen.dart
-│   ├── detalle_obra_screen.dart
+│   ├── splash_screen.dart
+│   ├── proyectos_screen.dart
+│   ├── detalle_proyecto_screen.dart
 │   ├── tareas_screen.dart
 │   ├── materiales_screen.dart
 │   ├── economia_screen.dart
@@ -60,19 +59,14 @@ lib/
 │   ├── estadisticas_screen.dart
 │   ├── calendario_screen.dart
 │   ├── eventos_dia_screen.dart
-│   ├── eventos_agrupados_screen.dart
-│   ├── recordatorios_screen.dart
-│   └── formulario_recordatorio_screen.dart
+│   └── eventos_agrupados_screen.dart
 ├── services/
 │   ├── storage_service.dart
 │   ├── backup_service.dart
-│   ├── pdf_service.dart
-│   ├── notification_service.dart
-│   └── reminder_service.dart
+│   └── pdf_service.dart
 ├── widgets/
 │   ├── tarjeta_evento.dart
-│   ├── leyenda_calendario.dart
-│   └── selector_recordatorio.dart
+│   └── leyenda_calendario.dart
 └── main.dart
 ```
 
@@ -80,8 +74,8 @@ lib/
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/Arocadev/obras-control
-cd obras-control
+git clone https://github.com/Arocadev/gest-pro
+cd gest-pro
 
 # Instalar dependencias
 flutter pub get
@@ -91,9 +85,6 @@ dart run build_runner build
 
 # Generar icono
 dart run flutter_launcher_icons
-
-# Generar splash
-dart run flutter_native_splash:create
 
 # Arrancar la app
 flutter run
@@ -116,27 +107,27 @@ Los datos se almacenan localmente en el dispositivo con Hive. Para no perder los
 
 🇬🇧 **English**
 
-ObrasControl is an Android app to manage construction works, tasks, materials, payments, invoicing, calendar and reminders from your phone. Designed for freelancers and small companies in the construction sector.
+GestPro is an Android app to manage projects, tasks, materials, payments, invoicing, calendar and events from your phone. Designed for freelancers and small companies that need to control their activity on the go.
 
 ## ✨ Features
 
-🏗️ **Work management** — create and organize your works with status and dates  
-✅ **Tasks** — task list per work with completed/pending tracking  
+📁 **Project management** — create and organize your projects with status and dates  
+✅ **Tasks** — task list per project with completed/pending tracking  
 🧱 **Materials** — material registry with quantity, unit price, total and VAT  
-💶 **Economy** — budget, collected, pending, expenses and estimated profit per work  
+💶 **Economy** — budget, collected, pending, expenses and estimated profit per project  
 💸 **Payments** — payment tracking with paid/pending status  
-🏦 **Invoicing** — invoice registry per work with concept and date  
-📊 **Summary** — global dashboard with pie chart and bar chart  
-📅 **Calendar** — monthly view with work, payment, invoice and reminder events  
-🔔 **Reminders** — alerts with notifications 1 day, 6 hours and 1 hour before  
-📄 **PDF** — generate and share a PDF summary of each work  
+🏦 **Invoicing** — invoice registry per project with concept and date  
+📊 **Summary** — global dashboard with 5 interactive charts and explanations  
+📅 **Calendar** — monthly view with project, payment, invoice and custom events  
+🗓️ **Events** — create custom events directly from the calendar  
+📄 **PDF** — generate and share a PDF summary of each project  
 💾 **Backup** — export and import all data in JSON format  
 
 ## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/Arocadev/obras-control
-cd obras-control
+git clone https://github.com/Arocadev/gest-pro
+cd gest-pro
 flutter pub get
 dart run build_runner build
 flutter run
@@ -144,8 +135,8 @@ flutter run
 
 ## 👤 Autor / Author
 
-Alejandro Rodríguez Calabuig — [github.com/Arocadev](https://github.com/Arocadev)
+Alejandro Rodríguez Calabuig — [github.com/Arocadev](https://github.com/Arocadev) · [LinkedIn](https://linkedin.com/in/alejandro-rodriguez-calabuig-a871a1230)
 
 ## 📄 Licencia / License
 
-Proyecto personal en desarrollo. Personal project under development.
+Proyecto personal de portfolio. Personal portfolio project.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/obra.dart';
+import '../models/proyecto.dart';
 import '../models/pago.dart';
 import '../services/storage_service.dart';
 
@@ -13,13 +13,13 @@ class PagosScreen extends StatefulWidget {
 
 class _PagosScreenState extends State<PagosScreen> {
   List<Pago> pagos = [];
-  List<Obra> obras = [];
+  List<Proyecto> proyectos = [];
 
   @override
   void initState() {
     super.initState();
     pagos = StorageService.cargarPagos();
-    obras = StorageService.cargarObras();
+    proyectos = StorageService.cargarProyectos();
   }
 
   Future<void> guardar() async {
@@ -34,19 +34,12 @@ class _PagosScreenState extends State<PagosScreen> {
               title: const Text('Eliminar pago'),
               content: Text('¿Eliminar el pago de ${pago.persona}?'),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancelar'),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Eliminar'),
-                ),
+                TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+                ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Eliminar')),
               ],
             );
           },
-        ) ??
-        false;
+        ) ?? false;
   }
 
   Future<void> eliminar(int index) async {
@@ -62,11 +55,11 @@ class _PagosScreenState extends State<PagosScreen> {
     );
 
     DateTime fecha = editar?.fecha ?? DateTime.now();
-    Obra? obraSeleccionada;
+    Proyecto? proyectoSeleccionado;
 
-    if (editar?.obraId != null) {
+    if (editar?.proyectoId != null) {
       try {
-        obraSeleccionada = obras.firstWhere((o) => o.id == editar!.obraId);
+        proyectoSeleccionado = proyectos.firstWhere((p) => p.id == editar!.proyectoId);
       } catch (_) {}
     }
 
@@ -94,48 +87,30 @@ class _PagosScreenState extends State<PagosScreen> {
                       decoration: const InputDecoration(labelText: 'Importe'),
                     ),
                     const SizedBox(height: 12),
-                    DropdownButtonFormField<Obra?>(
-                      initialValue: obraSeleccionada,
-                      decoration: const InputDecoration(labelText: 'Obra'),
+                    DropdownButtonFormField<Proyecto?>(
+                      initialValue: proyectoSeleccionado,
+                      decoration: const InputDecoration(labelText: 'Proyecto'),
                       items: [
-                        const DropdownMenuItem<Obra?>(
-                          value: null,
-                          child: Text('Ninguna'),
-                        ),
-                        ...obras.map((obra) {
-                          return DropdownMenuItem<Obra?>(
-                            value: obra,
-                            child: Text(obra.nombre),
-                          );
-                        }),
+                        const DropdownMenuItem<Proyecto?>(value: null, child: Text('Ninguno')),
+                        ...proyectos.map((p) => DropdownMenuItem<Proyecto?>(value: p, child: Text(p.nombre))),
                       ],
                       onChanged: (value) {
                         setDialogState(() {
-                          obraSeleccionada = value;
+                          proyectoSeleccionado = value;
                           tareaSeleccionada = null;
                         });
                       },
                     ),
-                    if (obraSeleccionada != null &&
-                        obraSeleccionada!.tareas.isNotEmpty)
-                      Column(
-                        children: [
-                          const SizedBox(height: 12),
-                          DropdownButtonFormField<String>(
-                            initialValue: tareaSeleccionada,
-                            decoration: const InputDecoration(labelText: 'Tarea'),
-                            items: obraSeleccionada!.tareas.map((t) {
-                              return DropdownMenuItem(
-                                value: t.nombre,
-                                child: Text(t.nombre),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setDialogState(() => tareaSeleccionada = value);
-                            },
-                          ),
-                        ],
+                    if (proyectoSeleccionado != null && proyectoSeleccionado!.tareas.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      DropdownButtonFormField<String>(
+                        initialValue: tareaSeleccionada,
+                        decoration: const InputDecoration(labelText: 'Tarea'),
+                        items: proyectoSeleccionado!.tareas.map((t) =>
+                            DropdownMenuItem(value: t.nombre, child: Text(t.nombre))).toList(),
+                        onChanged: (value) => setDialogState(() => tareaSeleccionada = value),
                       ),
+                    ],
                     const SizedBox(height: 12),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
@@ -149,47 +124,32 @@ class _PagosScreenState extends State<PagosScreen> {
                           firstDate: DateTime(2020),
                           lastDate: DateTime(2100),
                         );
-                        if (nueva != null) {
-                          setDialogState(() => fecha = nueva);
-                        }
+                        if (nueva != null) setDialogState(() => fecha = nueva);
                       },
                     ),
                   ],
                 ),
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancelar'),
-                ),
+                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
                 ElevatedButton(
                   onPressed: () async {
-                    if (personaController.text.trim().isEmpty ||
-                        importeController.text.trim().isEmpty) {
-                      return;
-                    }
-
-                    final importe = double.tryParse(
-                          importeController.text.replaceAll(',', '.'),
-                        ) ?? 0;
-
+                    if (personaController.text.trim().isEmpty || importeController.text.trim().isEmpty) return;
+                    final importe = double.tryParse(importeController.text.replaceAll(',', '.')) ?? 0;
                     final pago = Pago(
                       persona: personaController.text.trim(),
                       importe: importe,
                       fecha: fecha,
-                      obraId: obraSeleccionada?.id,
+                      proyectoId: proyectoSeleccionado?.id,
                       tarea: tareaSeleccionada,
                       pagado: editar?.pagado ?? false,
                     );
-
                     if (editar == null) {
                       pagos.add(pago);
                     } else {
                       pagos[indexEditar!] = pago;
                     }
-
                     await guardar();
-
                     if (!context.mounted) return;
                     setState(() {});
                     Navigator.pop(context);
@@ -206,13 +166,8 @@ class _PagosScreenState extends State<PagosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final totalPagado = pagos
-        .where((p) => p.pagado)
-        .fold(0.0, (s, p) => s + p.importe);
-
-    final totalPendiente = pagos
-        .where((p) => !p.pagado)
-        .fold(0.0, (s, p) => s + p.importe);
+    final totalPagado = pagos.where((p) => p.pagado).fold(0.0, (s, p) => s + p.importe);
+    final totalPendiente = pagos.where((p) => !p.pagado).fold(0.0, (s, p) => s + p.importe);
 
     return Scaffold(
       body: Column(
@@ -238,22 +193,13 @@ class _PagosScreenState extends State<PagosScreen> {
                             children: const [
                               Icon(Icons.check_circle, color: Colors.green, size: 16),
                               SizedBox(width: 6),
-                              Text(
-                                'Pagado',
-                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                              ),
+                              Text('Pagado', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            '${totalPagado.toStringAsFixed(2)} €',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                            ),
-                          ),
+                          Text('${totalPagado.toStringAsFixed(2)} €',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green)),
                         ],
                       ),
                     ),
@@ -277,22 +223,13 @@ class _PagosScreenState extends State<PagosScreen> {
                             children: const [
                               Icon(Icons.schedule, color: Colors.orange, size: 16),
                               SizedBox(width: 6),
-                              Text(
-                                'Pendiente',
-                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                              ),
+                              Text('Pendiente', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            '${totalPendiente.toStringAsFixed(2)} €',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.orange,
-                            ),
-                          ),
+                          Text('${totalPendiente.toStringAsFixed(2)} €',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange)),
                         ],
                       ),
                     ),
@@ -309,10 +246,9 @@ class _PagosScreenState extends State<PagosScreen> {
                     itemCount: pagos.length,
                     itemBuilder: (context, index) {
                       final pago = pagos[index];
-
-                      Obra? obra;
+                      Proyecto? proyecto;
                       try {
-                        obra = obras.firstWhere((o) => o.id == pago.obraId);
+                        proyecto = proyectos.firstWhere((p) => p.id == pago.proyectoId);
                       } catch (_) {}
 
                       return Card(
@@ -323,48 +259,31 @@ class _PagosScreenState extends State<PagosScreen> {
                         ),
                         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 4,
-                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                           leading: Icon(
                             pago.pagado ? Icons.check_circle : Icons.schedule,
                             color: pago.pagado ? Colors.green : Colors.orange,
                           ),
-                          title: Text(
-                            pago.persona,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          title: Text(pago.persona,
+                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 4),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  '${pago.importe.toStringAsFixed(2)} €',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: pago.pagado ? Colors.green : Colors.orange,
-                                  ),
-                                ),
-                                if (obra != null)
-                                  Text(
-                                    obra.nombre,
-                                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                                  ),
+                                Text('${pago.importe.toStringAsFixed(2)} €',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: pago.pagado ? Colors.green : Colors.orange)),
+                                if (proyecto != null)
+                                  Text(proyecto.nombre,
+                                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
                                 if (pago.tarea != null)
-                                  Text(
-                                    pago.tarea!,
-                                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                                  ),
-                                Text(
-                                  '${pago.fecha.day}/${pago.fecha.month}/${pago.fecha.year}',
-                                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                                ),
+                                  Text(pago.tarea!,
+                                      style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                                Text('${pago.fecha.day}/${pago.fecha.month}/${pago.fecha.year}',
+                                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
                               ],
                             ),
                           ),
@@ -375,9 +294,7 @@ class _PagosScreenState extends State<PagosScreen> {
                                 setState(() => pago.pagado = !pago.pagado);
                                 await guardar();
                               }
-                              if (value == 'edit') {
-                                await crearPago(editar: pago, indexEditar: index);
-                              }
+                              if (value == 'edit') await crearPago(editar: pago, indexEditar: index);
                               if (value == 'delete') {
                                 final borrar = await confirmarEliminar(pago);
                                 if (borrar) await eliminar(index);
@@ -385,9 +302,8 @@ class _PagosScreenState extends State<PagosScreen> {
                             },
                             itemBuilder: (_) => [
                               PopupMenuItem(
-                                value: 'toggle',
-                                child: Text(pago.pagado ? 'Marcar pendiente' : 'Marcar pagado'),
-                              ),
+                                  value: 'toggle',
+                                  child: Text(pago.pagado ? 'Marcar pendiente' : 'Marcar pagado')),
                               const PopupMenuItem(value: 'edit', child: Text('Editar')),
                               const PopupMenuItem(value: 'delete', child: Text('Eliminar')),
                             ],
@@ -405,10 +321,7 @@ class _PagosScreenState extends State<PagosScreen> {
         child: SizedBox(
           width: 54,
           height: 54,
-          child: FloatingActionButton(
-            onPressed: crearPago,
-            child: const Icon(Icons.add, size: 26),
-          ),
+          child: FloatingActionButton(onPressed: crearPago, child: const Icon(Icons.add, size: 26)),
         ),
       ),
     );

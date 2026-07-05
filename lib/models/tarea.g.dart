@@ -19,17 +19,23 @@ class TareaAdapter extends TypeAdapter<Tarea> {
     return Tarea(
       nombre: fields[0] as String,
       hecha: fields[1] as bool,
+      fechaInicio: fields[2] as DateTime?,
+      fechaLimite: fields[3] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Tarea obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.nombre)
       ..writeByte(1)
-      ..write(obj.hecha);
+      ..write(obj.hecha)
+      ..writeByte(2)
+      ..write(obj.fechaInicio)
+      ..writeByte(3)
+      ..write(obj.fechaLimite);
   }
 
   @override

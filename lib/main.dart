@@ -5,13 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'models/cobro.dart';
-import 'models/material_obra.dart';
-import 'models/obra.dart';
+import 'models/evento_calendario.dart';
+import 'models/material_proyecto.dart';
+import 'models/proyecto.dart';
 import 'models/pago.dart';
-import 'models/recordatorio.dart';
 import 'models/tarea.dart';
-import 'screens/home_screen.dart';
-import 'services/notification_service.dart';
+import 'screens/splash_screen.dart';
 import 'services/storage_service.dart';
 
 Future<void> main() async {
@@ -24,30 +23,28 @@ Future<void> main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(TareaAdapter());
-  Hive.registerAdapter(MaterialObraAdapter());
-  Hive.registerAdapter(ObraAdapter());
+  Hive.registerAdapter(MaterialProyectoAdapter());
+  Hive.registerAdapter(ProyectoAdapter());
   Hive.registerAdapter(PagoAdapter());
   Hive.registerAdapter(CobroAdapter());
-  Hive.registerAdapter(RecordatorioAdapter());
+  Hive.registerAdapter(EventoCalendarioAdapter());
 
-  await Hive.openBox<Obra>(StorageService.obrasBox);
+  await Hive.openBox<Proyecto>(StorageService.proyectosBox);
   await Hive.openBox<Pago>(StorageService.pagosBox);
   await Hive.openBox<Cobro>(StorageService.cobrosBox);
-  await Hive.openBox<Recordatorio>(StorageService.recordatoriosBox);
+  await Hive.openBox<EventoCalendario>('eventos_libres');
 
-  await NotificationService.init();
-
-  runApp(const ObraControlApp());
+  runApp(const GestProApp());
 }
 
-class ObraControlApp extends StatelessWidget {
-  const ObraControlApp({super.key});
+class GestProApp extends StatelessWidget {
+  const GestProApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ObrasControl',
+      title: 'GestPro',
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
@@ -60,7 +57,7 @@ class ObraControlApp extends StatelessWidget {
       ],
       supportedLocales: const [Locale('es')],
       locale: const Locale('es'),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

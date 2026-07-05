@@ -1,38 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'material_obra.dart';
+part of 'evento_calendario.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MaterialObraAdapter extends TypeAdapter<MaterialObra> {
+class EventoCalendarioAdapter extends TypeAdapter<EventoCalendario> {
   @override
-  final int typeId = 1;
+  final int typeId = 6;
 
   @override
-  MaterialObra read(BinaryReader reader) {
+  EventoCalendario read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MaterialObra(
-      nombre: fields[0] as String,
-      cantidad: fields[1] as double,
-      precioUnidad: fields[2] as double,
+    return EventoCalendario(
+      fecha: fields[0] as DateTime,
+      titulo: fields[1] as String,
+      colorValue: fields[2] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, MaterialObra obj) {
+  void write(BinaryWriter writer, EventoCalendario obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.nombre)
+      ..write(obj.fecha)
       ..writeByte(1)
-      ..write(obj.cantidad)
+      ..write(obj.titulo)
       ..writeByte(2)
-      ..write(obj.precioUnidad);
+      ..write(obj.colorValue);
   }
 
   @override
@@ -41,7 +41,7 @@ class MaterialObraAdapter extends TypeAdapter<MaterialObra> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MaterialObraAdapter &&
+      other is EventoCalendarioAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

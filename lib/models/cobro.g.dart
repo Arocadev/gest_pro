@@ -17,7 +17,7 @@ class CobroAdapter extends TypeAdapter<Cobro> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Cobro(
-      obraId: fields[0] as String,
+      proyectoId: fields[0] as String,
       importe: fields[1] as double,
       fecha: fields[2] as DateTime,
       concepto: fields[3] as String,
@@ -29,7 +29,7 @@ class CobroAdapter extends TypeAdapter<Cobro> {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.obraId)
+      ..write(obj.proyectoId)
       ..writeByte(1)
       ..write(obj.importe)
       ..writeByte(2)

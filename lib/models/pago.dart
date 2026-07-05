@@ -14,7 +14,7 @@ class Pago extends HiveObject {
   DateTime fecha;
 
   @HiveField(3)
-  String? obraId;
+  String? proyectoId;
 
   @HiveField(4)
   String? tarea;
@@ -26,7 +26,7 @@ class Pago extends HiveObject {
     required this.persona,
     required this.importe,
     required this.fecha,
-    this.obraId,
+    this.proyectoId,
     this.tarea,
     this.pagado = false,
   });

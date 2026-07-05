@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.obra_control"
+    namespace = "com.arocadev.gest_pro"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.obra_control"
+        applicationId = "com.arocadev.gest_pro"
         minSdk = flutter.minSdkVersion
         targetSdk = 36
         versionCode = flutter.versionCode

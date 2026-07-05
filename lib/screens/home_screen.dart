@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'calendario_screen.dart';
 import 'estadisticas_screen.dart';
 import 'finanzas_screen.dart';
-import 'obras_screen.dart';
+import 'proyectos_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
 
   final pages = const [
-    ObrasScreen(),
+    ProyectosScreen(),
     FinanzasScreen(),
     CalendarioScreen(),
     EstadisticasScreen(),
@@ -30,11 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           color: const Color(0xFFF2F3F5),
           boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
+            BoxShadow(color: Colors.black12, blurRadius: 10, offset: const Offset(0, -2)),
           ],
         ),
         child: BottomNavigationBar(
@@ -43,26 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex: currentIndex,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
-          onTap: (index) {
-            setState(() => currentIndex = index);
-          },
+          onTap: (index) => setState(() => currentIndex = index),
           items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_work),
-              label: 'Obras',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.payments),
-              label: 'Finanzas',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month),
-              label: 'Calendario',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
-              label: 'Resumen',
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.folder_open), label: 'Proyectos'),
+            BottomNavigationBarItem(icon: Icon(Icons.payments), label: 'Finanzas'),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Calendario'),
+            BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Resumen'),
           ],
         ),
       ),
