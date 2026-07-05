@@ -206,7 +206,7 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 8, bottom: 90),
+        padding: const EdgeInsets.only(right: 8, bottom: 120),
         child: SizedBox(
           width: 54,
           height: 54,
